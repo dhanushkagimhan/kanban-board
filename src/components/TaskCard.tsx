@@ -29,7 +29,7 @@ export default function TaskCard({
       price += unitTotalPrice;
     });
 
-    return price;
+    return price.toFixed(2);
   };
 
   return (
