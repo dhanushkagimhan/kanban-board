@@ -11,7 +11,6 @@ export const OrdersBoard: React.FC = () => {
   const [readyOrders, setReadyOrders] = useState<Order[]>([]);
 
   useEffect(() => {
-    console.log(orders);
     differentiatingOrders();
   }, []);
 
@@ -19,28 +18,58 @@ export const OrdersBoard: React.FC = () => {
     orders.forEach((order: Order) => {
       switch (order.status) {
         case OrderStatus.New:
-          setNewOrders((preOrder) => [...preOrder, order]);
+          setNewOrders((preOrders) => [...preOrders, order]);
           break;
         case OrderStatus.Active:
-          setActiveOrders((preOrder) => [...preOrder, order]);
+          setActiveOrders((preOrders) => [...preOrders, order]);
           break;
         case OrderStatus.Ready:
-          setReadyOrders((preOrder) => [...preOrder, order]);
+          setReadyOrders((preOrders) => [...preOrders, order]);
           break;
       }
     });
   };
 
   const setOrderActive = (id: number) => {
-    console.log(id);
+    const processingOrder = orders.find((order) => order.id === id);
+
+    if (processingOrder != null) {
+      const tempNewOrders: Order[] = [...newOrders];
+      const updatedNewOrders: Order[] = tempNewOrders.filter(
+        (order) => order.id !== id
+      );
+      setNewOrders(updatedNewOrders);
+
+      setActiveOrders((preOrders) => [...preOrders, processingOrder]);
+
+      // Need to update backend with API also
+    }
   };
 
   const setOrderReady = (id: number) => {
-    console.log(id);
+    const processingOrder = orders.find((order) => order.id === id);
+
+    if (processingOrder != null) {
+      const tempActiveOrders: Order[] = [...activeOrders];
+      const updatedActiveOrders: Order[] = tempActiveOrders.filter(
+        (order) => order.id !== id
+      );
+      setActiveOrders(updatedActiveOrders);
+
+      setReadyOrders((preOrders) => [...preOrders, processingOrder]);
+
+      // Need to update backend with API also
+    }
   };
 
   const setOrderComplete = (id: number) => {
-    console.log(id);
+    const tempOrders: Order[] = [...readyOrders];
+    const updatedOrders: Order[] = tempOrders.filter(
+      (order) => order.id !== id
+    );
+    setReadyOrders(updatedOrders);
+
+    // Need to update backend with API also
   };
 
   return (
@@ -55,7 +84,14 @@ export const OrdersBoard: React.FC = () => {
           </div>
           <div className="mt-2 flex flex-col gap-4">
             {newOrders.map((order: Order, index: number) => {
-              return <TaskCard order={order} buttonAction={setOrderActive} />;
+              return (
+                <TaskCard
+                  order={order}
+                  buttonTitle="Approve"
+                  buttonAction={setOrderActive}
+                  keyValue={order.id}
+                />
+              );
             })}
           </div>
         </div>
@@ -68,7 +104,14 @@ export const OrdersBoard: React.FC = () => {
           </div>
           <div className="mt-2 flex flex-col gap-4">
             {activeOrders.map((order: Order, index: number) => {
-              return <TaskCard order={order} buttonAction={setOrderActive} />;
+              return (
+                <TaskCard
+                  order={order}
+                  buttonTitle="Ready"
+                  buttonAction={setOrderReady}
+                  keyValue={order.id}
+                />
+              );
             })}
           </div>
         </div>
@@ -78,7 +121,14 @@ export const OrdersBoard: React.FC = () => {
           </div>
           <div className="mt-2 flex flex-col gap-4">
             {readyOrders.map((order: Order, index: number) => {
-              return <TaskCard order={order} buttonAction={setOrderActive} />;
+              return (
+                <TaskCard
+                  order={order}
+                  buttonTitle="Complete"
+                  buttonAction={setOrderComplete}
+                  keyValue={order.id}
+                />
+              );
             })}
           </div>
         </div>
