@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import OrdersJson from "../data/orders.json";
 import { Order, OrderStatus } from "../types/order.type";
 import TaskCard from "./TaskCard";
@@ -83,7 +83,7 @@ export const OrdersBoard: React.FC = () => {
             </div>
           </div>
           <div className="mt-2 flex flex-col gap-4">
-            {newOrders.map((order: Order, index: number) => {
+            {newOrders.map((order: Order) => {
               return (
                 <TaskCard
                   order={order}
@@ -103,7 +103,7 @@ export const OrdersBoard: React.FC = () => {
             </div>
           </div>
           <div className="mt-2 flex flex-col gap-4">
-            {activeOrders.map((order: Order, index: number) => {
+            {activeOrders.map((order: Order) => {
               return (
                 <TaskCard
                   order={order}
@@ -120,7 +120,7 @@ export const OrdersBoard: React.FC = () => {
             <span className="font-semibold">Ready</span>
           </div>
           <div className="mt-2 flex flex-col gap-4">
-            {readyOrders.map((order: Order, index: number) => {
+            {readyOrders.map((order: Order) => {
               return (
                 <TaskCard
                   order={order}
